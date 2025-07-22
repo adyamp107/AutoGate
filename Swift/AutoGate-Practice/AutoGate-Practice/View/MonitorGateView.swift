@@ -12,41 +12,17 @@ struct MonitorGateView: View {
     @State private var selectedGolongan: String? = nil
 
     var body: some View {
-        ZStack {
+        VStack(spacing: 12) {
+            CameraGateView(gateName: "Gate 1")
+            
             HStack {
-                VStack(spacing: 12) {
-                    CameraGateView(gateName: "Gate 1")
-                    VehicleDetailView(showPopup: $showPopup)
-                }
-                .padding(10)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(NSColor.windowBackgroundColor))
-
-                Divider()
-
-                VStack(spacing: 12) {
-                    CameraGateView(gateName: "Gate 2")
-                    VehicleDetailView(showPopup: $showPopup)
-                }
-                .padding(10)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(NSColor.windowBackgroundColor))
-            }
-
-            if showPopup {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-
-                ManualPopupView { selected in
-                    selectedGolongan = selected
-                    showPopup = false
-                    print("Golongan dipilih: \(selected)")
-                }
-                .frame(width: 300)
-                .transition(.scale)
+                VehicleDetailView(carImage: "Car_type", carLidarImage: "Lidar_result", carName: "Kendaraan 1")
+                
+                VehicleDetailView(carImage: "Car_type2", carLidarImage: "Lidar_result2", carName: "Kendaraan 2")
             }
         }
-        .animation(.easeInOut, value: showPopup)
+        .padding(10)
+        .background(Color(NSColor.windowBackgroundColor))
     }
 }
 

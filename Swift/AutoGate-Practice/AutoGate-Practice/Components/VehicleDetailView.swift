@@ -8,14 +8,53 @@
 import SwiftUI
 
 struct VehicleDetailView: View {
-    @Binding var showPopup: Bool
-    
+    let carImage: String
+    let carLidarImage: String
+    let carName: String
+
     var body: some View {
 
-        HStack(spacing: 16) {
-            VehicleAnalysisComponent(carImage: "Car_type", carLidarImage: "Lidar_result", carName: "Kendaraan 1", showPopup: $showPopup)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text(carName)
+                    .font(.title3)
+                    .fontWeight(.semibold)
 
-            VehicleAnalysisComponent(carImage: "Car_type2", carLidarImage: "Lidar_result2", carName: "Kendaraan 2", showPopup: $showPopup)
+                Spacer()
+
+                Button(action: {}) {
+                    Image(systemName: "trash")
+                        .padding(8)
+                        .font(.title3)
+                        .background(Color.gray.opacity(0.2))
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+
+                }
+                .buttonStyle(PlainButtonStyle())
+
+            }
+
+            HStack (spacing: 16){
+                Image(carImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 150)
+                    .cornerRadius(8)
+                    .clipped()
+
+                Image(carLidarImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 150)
+                    .cornerRadius(8)
+                    .clipped()
+            }
+
+            HStack(spacing: 16) {
+                GolonganButtonGroup()
+
+                GOLCard()
+            }
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -26,5 +65,9 @@ struct VehicleDetailView: View {
 }
 
 #Preview {
-    VehicleDetailView(showPopup: .constant(false))
+    VehicleDetailView(
+        carImage: "Car_type",
+        carLidarImage: "Lidar_result",
+        carName: "Kendaraan 1"
+    )
 }

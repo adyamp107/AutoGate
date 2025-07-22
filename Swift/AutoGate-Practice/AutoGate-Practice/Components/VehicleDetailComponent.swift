@@ -11,30 +11,29 @@ struct VehicleAnalysisComponent: View {
     let carImage: String
     let carLidarImage: String
     let carName: String
-    @Binding var showPopup: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(carName)
                 .font(.title3)
-            
+
             Image(carImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 150)
                 .cornerRadius(8)
                 .clipped()
-            
+
             Image(carLidarImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(height: 150)
                 .cornerRadius(8)
                 .clipped()
-            
-            HStack(spacing: 4){
-                ManualButton(showPopup: $showPopup)
-                
+
+            HStack(spacing: 4) {
+                ManualButton()
+
                 GOLCard()
             }
         }
@@ -42,11 +41,10 @@ struct VehicleAnalysisComponent: View {
 }
 
 struct ManualButton: View {
-    @Binding var showPopup: Bool
 
     var body: some View {
         Button(action: {
-            showPopup = true
+
         }) {
             VStack {
                 Spacer()
@@ -66,6 +64,45 @@ struct ManualButton: View {
     }
 }
 
+struct GolonganButtonGroup: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            // Baris pertama: 1 dan 2
+            HStack(spacing: 8) {
+                GolonganButton(label: "1")
+                    .frame(maxWidth: .infinity)
+                GolonganButton(label: "2")
+                    .frame(maxWidth: .infinity)
+            }
+
+            // Baris kedua: 3, 4, dan 5
+            HStack(spacing: 8) {
+                GolonganButton(label: "3")
+                GolonganButton(label: "4")
+                GolonganButton(label: "5")
+            }
+        }
+        .padding(0)
+        .frame(maxWidth: .infinity)
+    }
+}
+
+struct GolonganButton: View {
+    let label: String
+
+    var body: some View {
+        Button(action: {}) {
+            Text(label)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.primer)
+                .cornerRadius(8)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
 
 struct GOLCard: View {
     var body: some View {
@@ -86,7 +123,6 @@ struct GOLCard: View {
             Spacer()
         }
         .frame(minWidth: 100, maxHeight: .infinity)
-        .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.secondary.opacity(0.3), lineWidth: 1)

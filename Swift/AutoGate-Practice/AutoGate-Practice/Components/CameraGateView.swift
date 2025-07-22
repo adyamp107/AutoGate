@@ -6,18 +6,19 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct CameraGateView: View {
     let gateName: String
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .center, spacing: 12) {
             Text(gateName)
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            HStack{
-                CameraPartView(camImage: "CCTV_view1", camTitle: "Cam 1")
-                CameraPartView(camImage: "CCTV_view2", camTitle: "Cam 2")
+            HStack {
+                CameraPartView(videoName: "Mazda3", camTitle: "Cam 1")
+                CameraPartView(videoName: "GarbageTruck", camTitle: "Cam 2")
             }
         }
         .padding()
@@ -28,18 +29,17 @@ struct CameraGateView: View {
 }
 
 struct CameraPartView: View {
-    let camImage: String
+    let videoName: String
     let camTitle: String
     var body: some View {
-        VStack (alignment: .leading, spacing: 8){
-            Image(camImage)
-                .resizable()
-                .frame(height: 200)
+        VStack(alignment: .leading, spacing: 8) {
+            LoopingVideoPlayer(videoName: videoName)
+                .frame(minHeight: 100)
                 .cornerRadius(8)
                 .clipped()
-            
+
             HStack(spacing: 6) {
-                HStack (spacing: 4){
+                HStack(spacing: 4) {
                     Text("•")
                         .foregroundStyle(Color.red)
                         .font(.title3)
