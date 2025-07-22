@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct VehicleDetailView: View {
-    let carImage: String
-    let carLidarImage: String
+    let carImage: String?
+    let carLidarImage: String?
     let carName: String
+    let jenisGolongan: Int?
 
     var body: some View {
 
@@ -34,26 +35,53 @@ struct VehicleDetailView: View {
 
             }
 
-            HStack (spacing: 16){
-                Image(carImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 150)
-                    .cornerRadius(8)
-                    .clipped()
+            HStack(spacing: 16) {
+                if let carImage = carImage {
+                    Image(carImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 150)
+                        .cornerRadius(8)
+                        .clipped()
+                } else {
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 150)
+                            .cornerRadius(8)
+                        Text("No Picture")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                GOLCard(golonganNumber: jenisGolongan)
 
-                Image(carLidarImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 150)
-                    .cornerRadius(8)
-                    .clipped()
             }
 
             HStack(spacing: 16) {
+                if let carLidarImage = carLidarImage {
+                    Image(carLidarImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 150)
+                        .cornerRadius(8)
+                        .clipped()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.primer, lineWidth: 1.5)
+                        )
+                } else {
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.2))
+                            .frame(height: 150)
+                            .cornerRadius(8)
+                        Text("No LIDAR")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
                 GolonganButtonGroup()
-
-                GOLCard()
             }
         }
         .padding()
@@ -68,6 +96,7 @@ struct VehicleDetailView: View {
     VehicleDetailView(
         carImage: "Car_type",
         carLidarImage: "Lidar_result",
-        carName: "Kendaraan 1"
+        carName: "Kendaraan 1",
+        jenisGolongan: 1
     )
 }

@@ -5,11 +5,12 @@
 //  Created by Ali Jazzy Rasyid on 17/07/25.
 //
 
-import SwiftUI
 import AVKit
+import SwiftUI
 
 struct CameraGateView: View {
     let gateName: String
+    let step: Int
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
             Text(gateName)
@@ -17,8 +18,18 @@ struct CameraGateView: View {
                 .fontWeight(.semibold)
 
             HStack {
-                CameraPartView(videoName: "Mazda3", camTitle: "Cam 1")
-                CameraPartView(videoName: "GarbageTruck", camTitle: "Cam 2")
+                CameraPartView(
+                    step: step,
+                    index: 1,
+                    videoName: "Mazda3",
+                    camTitle: "Cam 1"
+                )
+                CameraPartView(
+                    step: step,
+                    index: 1,
+                    videoName: "GarbageTruck",
+                    camTitle: "Cam 2"
+                )
             }
         }
         .padding()
@@ -29,14 +40,22 @@ struct CameraGateView: View {
 }
 
 struct CameraPartView: View {
+    let step: Int
+    let index: Int
     let videoName: String
     let camTitle: String
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            LoopingVideoPlayer(videoName: videoName)
-                .frame(minHeight: 100)
-                .cornerRadius(8)
-                .clipped()
+            Group {
+                if step >= index {
+                    LoopingVideoPlayer(videoName: videoName)
+                } else {
+                    Rectangle()
+                        .fill(Color.black)
+                }
+            }
+            .frame(minHeight: 100)
+            .cornerRadius(8)
 
             HStack(spacing: 6) {
                 HStack(spacing: 4) {
@@ -55,5 +74,5 @@ struct CameraPartView: View {
 }
 
 #Preview {
-    CameraGateView(gateName: "Gate 1")
+    CameraGateView(gateName: "Gate 1", step: 1)
 }
