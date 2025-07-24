@@ -54,7 +54,7 @@ class App(ctk.CTk):
         self.ax_vehicle_left_lidar2d.set_title("\n2D Left Side View (Y-Z)")
         self.ax_vehicle_left_lidar2d.scatter([], [])
         self.line_vehicle_left_lidar2d = self.ax_vehicle_left_lidar2d.axhline(y=0, color='red', linestyle='--', linewidth=1)
-        self.ax_vehicle_left_lidar2d.axis("off")
+        # self.ax_vehicle_left_lidar2d.axis("off")
         self.fig_vehicle_left_lidar2d.tight_layout(pad=0)
         self.canvas_vehicle_left_lidar2d = FigureCanvasTkAgg(self.fig_vehicle_left_lidar2d, master=self.lidar2d)
         self.canvas_vehicle_left_lidar2d.draw()
@@ -110,10 +110,9 @@ class App(ctk.CTk):
         self.class_result.pack(padx=10, pady=(5, 10))
 
         # =================== STATE ===================
-        self.loaded_points = []
         self.loaded_pcd = None
         self.slider_value_lidar2d = 0
-        self.left_side_points = []
+        self.loaded_points = []
 
         self.totalAxles = 0
         self.maxHeight = 0
@@ -130,25 +129,25 @@ class App(ctk.CTk):
             pcd = o3d.io.read_point_cloud(file_path)
             points = np.asarray(pcd.points)
 
-            points -= points.min(axis=0)
-
             if points.shape[0] == 0:
                 self.selected_path_lidar2d.configure(text="File kosong")
                 return
+            
+            points = points.copy()
+
+            points[:, 0] = 0
+
+            points[:, 2] -= np.min(points[:, 2])
 
             self.loaded_points = points
             self.loaded_pcd = pcd
             self.slider_value_lidar2d = 0.07
 
-            x_max = points[:, 0].max()
-            threshold = 0.1 * (x_max - points[:, 0].min())
-            self.left_side_points = points[points[:, 0] >= x_max - threshold]
-
             self.ax_vehicle_left_lidar2d.clear()
-            self.ax_vehicle_left_lidar2d.scatter(self.left_side_points[:, 1], self.left_side_points[:, 2], s=1, c='blue')
+            self.ax_vehicle_left_lidar2d.scatter(self.loaded_points[:, 1], self.loaded_points[:, 2], s=1, c='blue')
             self.ax_vehicle_left_lidar2d.set_title("\n2D Left Side View (Y-Z)")
             self.line_vehicle_left_lidar2d = self.ax_vehicle_left_lidar2d.axhline(y=self.slider_value_lidar2d, color='red', linestyle='--', linewidth=1)
-            self.ax_vehicle_left_lidar2d.axis("off")
+            # self.ax_vehicle_left_lidar2d.axis("off")
             self.fig_vehicle_left_lidar2d.tight_layout(pad=0)
             self.canvas_vehicle_left_lidar2d.draw()
 
@@ -171,19 +170,19 @@ class App(ctk.CTk):
         self.count_axles()
 
     def count_axles(self):
-        if not len(self.left_side_points):
+        if not len(self.loaded_points):
             return
 
         threshold = 0.06
         z_value = self.slider_value_lidar2d
-        close_left_points = self.left_side_points[np.abs(self.left_side_points[:, 2] - z_value) < threshold]
+        close_left_points = self.loaded_points[np.abs(self.loaded_points[:, 2] - z_value) < threshold]
 
         if close_left_points.size == 0:
             self.axle_count_left_lidar2d.configure(text="Left axle(s): -")
             return
 
-        y_min = np.min(self.left_side_points[:, 1])
-        y_max = np.max(self.left_side_points[:, 1])
+        y_min = np.min(self.loaded_points[:, 1])
+        y_max = np.max(self.loaded_points[:, 1])
         bins = np.linspace(y_min, y_max, 101)
 
         hist_left, bin_edges_left = np.histogram(close_left_points[:, 1], bins=bins)
