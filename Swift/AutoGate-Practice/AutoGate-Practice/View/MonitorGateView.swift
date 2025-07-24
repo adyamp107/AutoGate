@@ -15,7 +15,7 @@ struct MonitorGateView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            CameraGateView(gateName: "Gate 1", step: currentStep)
+            CameraGateView(firstVideoName: "Cam1", secondVideoName: "Cam2")
 
             HStack {
                 VehicleDetailView(

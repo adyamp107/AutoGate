@@ -9,25 +9,22 @@ import AVKit
 import SwiftUI
 
 struct CameraGateView: View {
-    let gateName: String
-    let step: Int
+    let firstVideoName: String
+    let secondVideoName: String
+    
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
-            Text(gateName)
+            Text("Gate 1")
                 .font(.title2)
                 .fontWeight(.semibold)
 
             HStack {
                 CameraPartView(
-                    step: step,
-                    index: 1,
-                    videoName: "Mazda3",
+                    videoName: firstVideoName,
                     camTitle: "Cam 1"
                 )
                 CameraPartView(
-                    step: step,
-                    index: 1,
-                    videoName: "GarbageTruck",
+                    videoName: secondVideoName,
                     camTitle: "Cam 2"
                 )
             }
@@ -40,22 +37,15 @@ struct CameraGateView: View {
 }
 
 struct CameraPartView: View {
-    let step: Int
-    let index: Int
     let videoName: String
     let camTitle: String
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Group {
-                if step >= index {
-                    LoopingVideoPlayer(videoName: videoName)
-                } else {
-                    Rectangle()
-                        .fill(Color.black)
-                }
-            }
-            .frame(minHeight: 100)
-            .cornerRadius(8)
+            LoopingVideoPlayer(videoName: videoName)
+                .frame(minHeight: 100)
+                .cornerRadius(8)
+                .clipped()
 
             HStack(spacing: 6) {
                 HStack(spacing: 4) {
@@ -74,5 +64,5 @@ struct CameraPartView: View {
 }
 
 #Preview {
-    CameraGateView(gateName: "Gate 1", step: 1)
+    CameraGateView(firstVideoName: "Cam1", secondVideoName: "Cam2")
 }
