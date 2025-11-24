@@ -1,0 +1,9 @@
+tk
+customtkinter
+ultralytics
+opencv-python
+Pillow
+open3d
+numpy
+matplotlib
+scikit-learn
